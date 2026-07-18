@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Studio - Free AI Tools for Everyone</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="hamburger-menu" id="hamburgerMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <h1 class="logo">✨ Nova Studio</h1>
+                <p class="tagline">Free AI for Everyone</p>
+            </div>
+            <div class="header-right">
+                <div class="credits-display">
+                    <span class="credits-label">Daily Credits:</span>
+                    <span class="credits-count"><span id="currentCredits">60</span>/60</span>
+                    <button class="refresh-credits" id="refreshCredits" title="Credits refresh daily at 00:00 UTC">🔄</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <div class="main-container">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h2>AI Tools</h2>
+                    <button class="close-sidebar" id="closeSidebar">✕</button>
+                </div>
+                <ul class="nav-list">
+                    <li><a href="#" class="nav-link active" data-tool="chat">💬 AI Chat</a></li>
+                    <li><a href="#" class="nav-link" data-tool="image">🖼️ Image Generator</a></li>
+                    <li><a href="#" class="nav-link" data-tool="video">🎬 Video Maker</a></li>
+                    <li><a href="#" class="nav-link" data-tool="editor">✏️ Image Editor</a></li>
+                    <li><a href="#" class="nav-link" data-tool="voiceover">🎤 AI Voiceover</a></li>
+                </ul>
+                <div class="sidebar-footer">
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2rem;">💡 Chat is always FREE and doesn't use credits!</p>
+                </div>
+            </nav>
+
+            <!-- Content Area -->
+            <main class="content-area">
+                <!-- Loading Animation -->
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="spinning-wheel">
+                        <div class="wheel-inner"></div>
+                    </div>
+                    <p class="loading-text">AI is processing your request...</p>
+                </div>
+
+                <!-- AI Chat Tool -->
+                <section class="tool-section active" id="chatSection">
+                    <div class="tool-header">
+                        <h2>💬 AI Chat - Always Free!</h2>
+                        <p>Have intelligent conversations without using any credits</p>
+                    </div>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="chat-input-area">
+                            <textarea id="chatInput" placeholder="Ask me anything... (no credits used!)" rows="3"></textarea>
+                            <button class="btn btn-primary" id="sendChatBtn">Send Message 💬</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Image Generator Tool -->
+                <section class="tool-section" id="imageSection">
+                    <div class="tool-header">
+                        <h2>🖼️ Image Generator</h2>
+                        <p>Create stunning AI images from text descriptions (1 credit per image)</p>
+                    </div>
+                    <div class="image-generator-container">
+                        <div class="input-area">
+                            <textarea id="imagePrompt" placeholder="Describe the image you want to create... (e.g., 'A sunset over mountains with golden light')" rows="4"></textarea>
+                            <button class="btn btn-primary" id="generateImageBtn">Generate Image ✨ (1 Credit)</button>
+                        </div>
+                        <div class="gallery" id="imageGallery"></div>
+                    </div>
+                </section>
+
+                <!-- Video Maker Tool -->
+                <section class="tool-section" id="videoSection">
+                    <div class="tool-header">
+                        <h2>🎬 Video Maker - 3D Animated</h2>
+                        <p>Create 3D animated videos from text prompts (1 credit per video)</p>
+                    </div>
+                    <div class="video-maker-container">
+                        <div class="input-area">
+                            <textarea id="videoPrompt" placeholder="Describe the video you want to create... (e.g., 'Animated text saying Welcome with particles')" rows="4"></textarea>
+                            <button class="btn btn-primary" id="generateVideoBtn">Generate Video 🎬 (1 Credit)</button>
+                        </div>
+                        <div class="video-canvas">
+                            <div id="videoPlayerContainer" class="video-player-container hidden">
+                                <div class="video-player-header">Generated 3D Video</div>
+                                <video id="generatedVideo" controls></video>
+                                <div class="video-controls">
+                                    <button class="control-btn" id="playBtn">▶ Play</button>
+                                    <button class="control-btn" id="pauseBtn">⏸ Pause</button>
+                                    <input type="range" id="videoTimeline" class="timeline-scrubber" min="0" max="100" value="0">
+                                    <span class="time-display"><span id="currentTime">0:00</span> / <span id="duration">0:00</span></span>
+                                    <button class="control-btn delete-btn" id="deleteVideoBtn">🗑 Delete</button>
+                                </div>
+                            </div>
+                            <div id="videoPlaceholder" class="placeholder">Your 3D animated video will appear here</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Image Editor Tool -->
+                <section class="tool-section" id="editorSection">
+                    <div class="tool-header">
+                        <h2>✏️ Image Editor - Multi-Upload</h2>
+                        <p>Upload 5-10 images and edit with AI prompts (1 credit per edit)</p>
+                    </div>
+                    <div class="image-editor-container">
+                        <div class="upload-area">
+                            <input type="file" id="imageFileInput" multiple accept="image/*" style="display: none;">
+                            <button class="btn btn-secondary" id="uploadImageBtn">📁 Upload Images (5-10 max)</button>
+                            <p class="upload-info" id="uploadInfo">No images uploaded yet</p>
+                        </div>
+                        <div class="editor-content">
+                            <div class="gallery-grid" id="editorGallery"></div>
+                            <div class="edit-controls" id="editControls" style="display: none;">
+                                <textarea id="editPrompt" placeholder="Describe how you want to edit the selected image..." rows="3"></textarea>
+                                <button class="btn btn-primary" id="applyEditBtn">Apply Edit ✨ (1 Credit)</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AI Voiceover Tool -->
+                <section class="tool-section" id="voiceoverSection">
+                    <div class="tool-header">
+                        <h2>🎤 AI Voiceover & Voice Changer</h2>
+                        <p>Generate voiceovers or change voices on audio (1 credit per generation)</p>
+                    </div>
+                    <div class="voiceover-container">
+                        <div class="voiceover-tabs">
+                            <button class="tab-btn active" data-tab="text-to-speech">📝 Text to Speech</button>
+                            <button class="tab-btn" data-tab="voice-changer">🎙️ Voice Changer</button>
+                        </div>
+
+                        <!-- Text to Speech Tab -->
+                        <div class="tab-content active" id="textToSpeechTab">
+                            <div class="input-area">
+                                <textarea id="voiceText" placeholder="Enter text to convert to speech..." rows="4"></textarea>
+                                <select id="voiceModel" class="voice-select">
+                                    <option value="alloy">🎵 Alloy - Neutral Professional</option>
+                                    <option value="echo">🌊 Echo - Warm & Friendly</option>
+                                    <option value="nova">✨ Nova - Bright & Clear</option>
+                                    <option value="onyx">🌙 Onyx - Deep & Smooth</option>
+                                    <option value="shimmer">💫 Shimmer - Crisp & Energetic</option>
+                                    <option value="fable">📖 Fable - Storyteller Vibe</option>
+                                </select>
+                                <button class="btn btn-primary" id="generateVoiceBtn">Generate Voiceover 🎤 (1 Credit)</button>
+                            </div>
+                        </div>
+
+                        <!-- Voice Changer Tab -->
+                        <div class="tab-content" id="voiceChangerTab">
+                            <div class="input-area">
+                                <div class="file-upload-area">
+                                    <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
+                                    <button class="btn btn-secondary" id="uploadAudioBtn">📁 Upload Your Audio File</button>
+                                    <p id="audioFileName" style="margin-top: 0.5rem;">No audio file selected yet</p>
+                                </div>
+                                <select id="voiceChangerModel" class="voice-select">
+                                    <option value="alloy">🎵 Alloy - Neutral Professional</option>
+                                    <option value="echo">🌊 Echo - Warm & Friendly</option>
+                                    <option value="nova">✨ Nova - Bright & Clear</option>
+                                    <option value="onyx">🌙 Onyx - Deep & Smooth</option>
+                                    <option value="shimmer">💫 Shimmer - Crisp & Energetic</option>
+                                    <option value="fable">📖 Fable - Storyteller Vibe</option>
+                                </select>
+                                <button class="btn btn-primary" id="applyVoiceChangeBtn">Apply Voice Change 🎙️ (1 Credit)</button>
+                            </div>
+                        </div>
+
+                        <div class="audio-output" id="audioOutput"></div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Success Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
