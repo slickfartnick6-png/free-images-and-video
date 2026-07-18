@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard - Real-Time Weather App</title>
+    <link rel="stylesheet" href="weather-styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <button class="hamburger-menu" id="hamburgerMenu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <h1 class="logo">🌤️ Weather Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <button class="btn-theme" id="themeToggle" title="Toggle theme">🌙</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <div class="main-container">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h2>Navigation</h2>
+                    <button class="close-sidebar" id="closeSidebar">✕</button>
+                </div>
+                <nav class="sidebar-nav">
+                    <ul class="nav-list">
+                        <li><a href="#" class="nav-link active" data-view="current">📋 Current Weather</a></li>
+                        <li><a href="#" class="nav-link" data-view="forecast">📅 5-Day Forecast</a></li>
+                        <li><a href="#" class="nav-link" data-view="saved">⭐ Saved Locations</a></li>
+                        <li><a href="#" class="nav-link" data-view="settings">⚙️ Settings</a></li>
+                    </ul>
+                </nav>
+                <div class="sidebar-footer">
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">💡 Data from OpenWeatherMap API</p>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content-area">
+                <!-- Loading Overlay -->
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="spinner"></div>
+                    <p>Fetching weather data...</p>
+                </div>
+
+                <!-- Current Weather View -->
+                <section class="view active" id="currentView">
+                    <div class="search-section">
+                        <div class="search-container">
+                            <input type="text" id="citySearch" class="search-input" placeholder="Search for a city..." autocomplete="off">
+                            <button class="btn btn-primary" id="searchBtn">🔍 Search</button>
+                            <button class="btn btn-secondary" id="locationBtn" title="Use your location">📍 My Location</button>
+                        </div>
+                        <div class="suggestions" id="suggestions"></div>
+                    </div>
+
+                    <!-- Current Weather Card -->
+                    <div class="current-weather" id="currentWeather">
+                        <div class="weather-placeholder">Enter a city name to view weather</div>
+                    </div>
+
+                    <!-- Additional Info Cards -->
+                    <div class="info-grid" id="infoGrid">
+                        <div class="info-card">
+                            <div class="info-icon">💧</div>
+                            <div class="info-content">
+                                <div class="info-label">Humidity</div>
+                                <div class="info-value" id="humidity">-</div>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">💨</div>
+                            <div class="info-content">
+                                <div class="info-label">Wind Speed</div>
+                                <div class="info-value" id="windSpeed">-</div>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">🧭</div>
+                            <div class="info-content">
+                                <div class="info-label">Wind Direction</div>
+                                <div class="info-value" id="windDir">-</div>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">🔍</div>
+                            <div class="info-content">
+                                <div class="info-label">Visibility</div>
+                                <div class="info-value" id="visibility">-</div>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">📊</div>
+                            <div class="info-content">
+                                <div class="info-label">Pressure</div>
+                                <div class="info-value" id="pressure">-</div>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">☀️</div>
+                            <div class="info-content">
+                                <div class="info-label">UV Index</div>
+                                <div class="info-value" id="uvIndex">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hourly Forecast -->
+                    <div class="hourly-section" id="hourlySection">
+                        <h3>Hourly Forecast</h3>
+                        <div class="hourly-scroll" id="hourlyForecast"></div>
+                    </div>
+                </section>
+
+                <!-- 5-Day Forecast View -->
+                <section class="view" id="forecastView">
+                    <h2>📅 5-Day Weather Forecast</h2>
+                    <div class="forecast-grid" id="forecastGrid"></div>
+                </section>
+
+                <!-- Saved Locations View -->
+                <section class="view" id="savedView">
+                    <h2>⭐ Saved Locations</h2>
+                    <div class="saved-locations" id="savedLocations">
+                        <div class="placeholder">No saved locations yet</div>
+                    </div>
+                </section>
+
+                <!-- Settings View -->
+                <section class="view" id="settingsView">
+                    <h2>⚙️ Settings</h2>
+                    <div class="settings-container">
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <h3>Temperature Unit</h3>
+                                <p>Choose how temperature is displayed</p>
+                            </div>
+                            <div class="setting-control">
+                                <label class="radio-label">
+                                    <input type="radio" name="tempUnit" value="celsius" checked>
+                                    <span>Celsius (°C)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="tempUnit" value="fahrenheit">
+                                    <span>Fahrenheit (°F)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <h3>Wind Speed Unit</h3>
+                                <p>Choose how wind speed is displayed</p>
+                            </div>
+                            <div class="setting-control">
+                                <label class="radio-label">
+                                    <input type="radio" name="windUnit" value="mps" checked>
+                                    <span>Meters/Second (m/s)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="windUnit" value="kmh">
+                                    <span>Kilometers/Hour (km/h)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="windUnit" value="mph">
+                                    <span>Miles/Hour (mph)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <h3>Theme</h3>
+                                <p>Choose your preferred theme</p>
+                            </div>
+                            <div class="setting-control">
+                                <label class="radio-label">
+                                    <input type="radio" name="theme" value="auto" checked>
+                                    <span>Auto (System)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="theme" value="light">
+                                    <span>Light</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="theme" value="dark">
+                                    <span>Dark</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <h3>API Information</h3>
+                                <p>Weather data powered by OpenWeatherMap</p>
+                            </div>
+                            <div class="api-info">
+                                <p>Status: <span class="status-indicator">✓ Connected</span></p>
+                                <p>Last Updated: <span id="lastUpdate">Never</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script src="weather-script.js"></script>
+</body>
+</html>
